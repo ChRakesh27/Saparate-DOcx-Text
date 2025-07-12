@@ -1,0 +1,16 @@
+/* index.css */
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.docx-preview p {
+  line-height: 1.6;
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+.docx-preview h1,
+.docx-preview h2 {
+  margin-top: 16px;
+  font-weight: bold;
+}
