@@ -1,10 +1,10 @@
 import "./App.css";
-import DocxSplitCnEn from "./DocxSplitCnEn";
+import DocxLanguageSplitter from "./DocxLanguageSplitter";
 
 function App() {
   return (
     <>
-      <DocxSplitCnEn />
+      <DocxLanguageSplitter />
     </>
   );
 }
