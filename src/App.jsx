@@ -1,10 +1,10 @@
 import "./App.css";
-import DocxLanguageSplitter from "./DocxLanguageSplitter";
+import DocxSuttaSectionParser from "./DocxSuttaSectionParser";
 
 function App() {
   return (
     <>
-      <DocxLanguageSplitter />
+      <DocxSuttaSectionParser />
     </>
   );
 }
