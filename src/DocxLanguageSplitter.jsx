@@ -1,5 +1,6 @@
 import mammoth from "mammoth/mammoth.browser";
 import { useState } from "react";
+import PalmLeafReader from "./PalmLeafReader";
 
 // Script detection
 const isHindi = (str) => /[\u0900-\u097F]/.test(str);
@@ -76,6 +77,7 @@ const mergeEnglishWithoutHindi = (pairs) => {
 export default function DocxPairExtractor() {
   const [pairs, setPairs] = useState([]);
   const [html, setHtml] = useState("");
+  const [viewMode, setViewMode] = useState("json");
 
   const onFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -91,7 +93,6 @@ export default function DocxPairExtractor() {
     const mergedPairs = mergeEnglishWithoutHindi(rawPairs);
     setPairs(mergedPairs);
   };
-
   return (
     <div style={{ padding: 20, maxWidth: "1000px", margin: "0 auto" }}>
       <h2>DOCX → Hindi/English Pairs</h2>
@@ -122,81 +123,69 @@ export default function DocxPairExtractor() {
 
       {pairs.length > 0 && (
         <>
-          <h3 style={{ marginTop: 30 }}>JSON Output</h3>
-          <pre
-            style={{
-              background: "#0f172a",
-              color: "#e2e8f0",
-              padding: 20,
-              borderRadius: 8,
-              maxHeight: 400,
-              overflow: "auto",
-              fontSize: 12,
-            }}
-          >
-            {JSON.stringify(pairs, null, 2)}
-          </pre>
-
-          {/* <h3 style={{ marginTop: 30 }}>Paired Preview</h3>
-
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 20,
+              display: "inline-flex",
+              borderRadius: 999,
+              border: "1px solid #e2e8f0",
+              overflow: "hidden",
+              marginLeft: 12,
+              verticalAlign: "middle",
             }}
           >
-            {pairs.map((pair, idx) => (
-              <div
-                key={idx}
+            <button
+              type="button"
+              onClick={() => setViewMode("json")}
+              style={{
+                padding: "0.35rem 0.9rem",
+                fontSize: "0.8rem",
+                border: "none",
+                cursor: "pointer",
+                background: viewMode === "json" ? "#0f172a" : "transparent",
+                color: viewMode === "json" ? "#e5e7eb" : "#475569",
+              }}
+            >
+              JSON
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("preview")}
+              style={{
+                padding: "0.35rem 0.9rem",
+                fontSize: "0.8rem",
+                border: "none",
+                cursor: "pointer",
+                background: viewMode === "preview" ? "#0f172a" : "transparent",
+                color: viewMode === "preview" ? "#e5e7eb" : "#475569",
+              }}
+            >
+              Preview
+            </button>
+          </div>
+          {viewMode == "preview" ? (
+            // 🌴 Palm Leaf Reading Mode
+            <PalmLeafReader pairs={pairs} />
+          ) : (
+            // JSON Mode
+            <>
+              <h3 style={{ marginTop: 30 }}>JSON Output</h3>
+              <pre
                 style={{
-                  display: "contents",
+                  background: "#0f172a",
+                  color: "#e2e8f0",
+                  padding: 20,
+                  borderRadius: 8,
+                  maxHeight: 400,
+                  overflow: "auto",
+                  fontSize: 12,
                 }}
               >
-                <div
-                  style={{
-                    border: "1px solid #ddd",
-                    padding: 10,
-                    borderRadius: 6,
-                    background: "#fff",
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: pair.hindi || "<p style='color:#aaa'>—</p>",
-                  }}
-                />
-
-                <div
-                  style={{
-                    border: "1px solid #ddd",
-                    padding: 10,
-                    borderRadius: 6,
-                    background: "#fff",
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: pair.english || "<p style='color:#aaa'>—</p>",
-                  }}
-                />
-              </div>
-            ))}
-          </div> */}
+                {JSON.stringify(pairs, null, 2)}
+              </pre>
+            </>
+          )}
         </>
       )}
-
-      {/* {html && (
-        <>
-          <h3 style={{ marginTop: 40 }}>RAW Extracted HTML</h3>
-          <div
-            dangerouslySetInnerHTML={{ __html: html }}
-            style={{
-              padding: 20,
-              border: "1px solid #ddd",
-              borderRadius: 8,
-              background: "#fff",
-              marginTop: 10,
-            }}
-          />
-        </>
-      )} */}
     </div>
   );
 }
